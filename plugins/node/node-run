@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+source "${EQ_HOME}/plugins/helpers/env"
+
+EQ_NODE_DIR="${EQ_TOOLS}/node"
+EQ_NODE_VERSION=$(get_tool_version node)
+EQ_NODE_HOME="${EQ_NODE_DIR}/${EQ_NODE_VERSION}"
+EQ_NODE_BIN="${EQ_NODE_HOME}/bin"
+
+EXECUTABLE="${EQ_NODE_BIN}/node"
+
+if [ "${EQ_NODE_VERSION}" = "" ]; then
+  abort "The environment doesn't specify the version of 'node'."
+fi
+
+if [ -f "${EXECUTABLE}" ]; then
+  $EXECUTABLE $@
+else
+  echo "Could not find the installation of 'node@${EQ_NODE_VERSION}'."
+  echo "Try to execute the command 'equal' to install."
+fi

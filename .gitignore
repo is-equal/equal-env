@@ -1,0 +1,6 @@
+# Project
+tools/
+shims/
+
+# Misc
+.DS_Store

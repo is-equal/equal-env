@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+
+# From https://github.com/Homebrew/install/blob/master/install.sh
+abort() {
+  printf "%s\n" "$@"
+  exit 1
+}
+
+get_tool_version() {
+  echo "$EQ_ENVIRONMENT" | grep -w $1 | awk 'match($0, /@(.*)/) { print substr($0, RSTART+1, RLENGTH-1) }'
+}
+
+EQ_SHIMS="${EQ_HOME}/shims"
+EQ_TOOLS="${EQ_HOME}/tools"
+
+if [ "${EQ_ENVIRONMENT}" = "" ]; then
+  export EQ_ENVIRONMENT="$(cat .equal-env)"
+fi

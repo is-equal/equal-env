@@ -1,0 +1,38 @@
+#!/usr/bin/env sh
+
+source "${EQ_HOME}/plugins/helpers/env"
+
+EQ_NODE_DIR="${EQ_TOOLS}/node"
+EQ_NODE_VERSION=$(get_tool_version node)
+EQ_NODE_HOME="${EQ_NODE_DIR}/${EQ_NODE_VERSION}"
+EQ_NODE_BIN="${EQ_NODE_HOME}/bin"
+
+EXECUTABLE_FROM_NODE="${EQ_NODE_HOME}/lib/node_modules/npm/bin/npx-cli.js"
+
+EQ_NPM_DIR="${EQ_TOOLS}/npm"
+EQ_NPM_VERSION=$(get_tool_version npm)
+EQ_NPM_HOME="${EQ_NPM_DIR}/${EQ_NPM_VERSION}"
+EQ_NPM_BIN="${EQ_NPM_HOME}/bin"
+
+EXECUTABLE_FROM_NPM="${EQ_NPM_BIN}/npx-cli.js"
+
+if [[ "${EQ_NPM_VERSION}" = ""]] && [["${EQ_NODE_VERSION}" = ""  ]]; then
+  abort "The environment doesn't specify the version of 'node' or 'npm'."
+fi
+
+VERSION="'node' or 'npm'"
+
+if [ "${EQ_NPM_VERSION}" != "" ]; then
+  VERSION="npm@${EQ_NPM_VERSION}"
+  EXECUTABLE="${EXECUTABLE_FROM_NPM}"
+elif [ "${EQ_NODE_VERSION}" != "" ]; then
+  VERSION="node@${EQ_NODE_VERSION}"
+  EXECUTABLE="${EXECUTABLE_FROM_NODE}"
+fi
+
+if [ -f "${EXECUTABLE}" ]; then
+  $EXECUTABLE $@
+else
+  echo "Could not find the installation of ${VERSION}."
+  echo "Try to execute the command 'equal' to install."
+fi

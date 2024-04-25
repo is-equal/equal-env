@@ -1,0 +1,77 @@
+#!/usr/bin/env sh
+
+source "${EQ_HOME}/plugins/helpers/setup"
+source "${EQ_HOME}/plugins/helpers/env"
+
+help()
+{
+   echo "Equal Environment Tool"
+   echo
+   echo "Syntax: equal (alias for equal env)"
+   echo "        equal [command]"
+   echo
+   echo "commands:"
+   echo "   create-command    create custom command (in .equal/)"
+   echo "   env               load/install all tools configured (in .equal-env file)"
+   echo "   run               execute script (at .equal/<script-name>.sh)"
+   echo
+}
+
+run() {
+  .equal/$1.sh
+}
+
+create_command() {
+  touch .equal/$1.sh
+  chmod +x .equal/$1.sh
+}
+
+setup_env() {
+  mkdir -p $EQ_SHIMS
+  mkdir -p $EQ_TOOLS
+
+  if [ ! -f .equal-env ]; then
+    abort "No environment settings!"
+  fi
+
+  echo "Loading environment..."
+
+  source "${EQ_HOME}/plugins/node/setup"
+  source "${EQ_HOME}/plugins/npm/setup"
+  source "${EQ_HOME}/plugins/pnpm/setup"
+  source "${EQ_HOME}/plugins/apollo-rover/setup"
+
+  if [ -f .equal/setup.sh ]; then
+    echo "\n=> project setup"
+    .equal/setup.sh
+  fi
+}
+
+while getopts ":h" option; do
+  case $option in
+    h)
+      help
+      exit;;
+    \?)
+      echo "Error: Invalid option"
+      exit;;
+  esac
+done
+
+case "$1" in
+  create-command)
+    create_command $2
+    echo "\nequal create-command $2: done!"
+    exit;;
+  run)
+    run $2
+    echo "\nequal run $2: done!"
+    exit;;
+  env | "")
+    setup_env
+    echo "\nequal environment: done!"
+    exit;;
+  *)
+    echo "Error: Invalid option"
+    exit;;
+esac

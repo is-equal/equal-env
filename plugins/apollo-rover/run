@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+source "${EQ_HOME}/plugins/helpers/env"
+
+EQ_APOLLO_ROVER_DIR="${EQ_TOOLS}/apollo-rover"
+EQ_APOLLO_ROVER_VERSION=$(get_tool_version apollo-rover)
+EQ_APOLLO_ROVER_HOME="${EQ_APOLLO_ROVER_DIR}/${EQ_APOLLO_ROVER_VERSION}"
+EQ_APOLLO_ROVER_BIN="${EQ_APOLLO_ROVER_HOME}"
+
+EXECUTABLE="${EQ_APOLLO_ROVER_BIN}/run.js"
+
+if [ "${EQ_APOLLO_ROVER_VERSION}" = "" ]; then
+  abort "The environment doesn't specify the version of 'apollo-rover'."
+fi
+
+if [ -f "${EXECUTABLE}" ]; then
+  $EXECUTABLE $@
+else
+  echo "Could not find the installation of 'apollo-rover@${EQ_APOLLO_ROVER_VERSION}'."
+  echo "Try to execute the command 'equal' to install."
+fi

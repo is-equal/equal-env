@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+
+# From https://github.com/apollographql/rover/blob/main/installers/binstall/scripts/nix/install.sh
+need_cmd() {
+  if ! check_cmd "$1"
+  then abort "need '$1' (command not found)"
+  fi
+}
+
+# From https://github.com/apollographql/rover/blob/main/installers/binstall/scripts/nix/install.sh
+check_cmd() {
+  command -v "$1" > /dev/null 2>&1
+  return $?
+}
+
+download() {
+  if command -v curl > /dev/null 2>&1; then
+    curl -fsSL "$1"
+  elif command -v wget > /dev/null 2>&1; then
+    wget -qO- "$1"
+  else
+    abort "no curl or wget found!"
+  fi
+}

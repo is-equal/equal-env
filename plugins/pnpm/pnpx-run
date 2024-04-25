@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+
+source "${EQ_HOME}/plugins/helpers/env"
+
+EQ_PNPM_DIR="${EQ_TOOLS}/pnpm"
+EQ_PNPM_VERSION=$(get_tool_version pnpm)
+EQ_PNPM_HOME="${EQ_PNPM_DIR}/${EQ_PNPM_VERSION}"
+EQ_PNPM_BIN="${EQ_PNPM_HOME}/bin"
+
+EXECUTABLE="${EQ_PNPM_BIN}/pnpx.cjs"
+
+export PNPM_HOME="${EQ_PNPM_HOME}"
+
+if [ "${EQ_PNPX_VERSION}" = "" ]; then
+  abort "The environment doesn't specify the version of 'pnpm'."
+fi
+
+if [ -f "${EXECUTABLE}" ]; then
+  $EXECUTABLE $@
+else
+  echo "Could not find the installation of 'pnpm@${EQ_PNPX_VERSION}'."
+  echo "Try to execute the command 'equal' to install."
+fi

@@ -1,0 +1,50 @@
+#!/usr/bin/env sh
+
+EQ_NPM_DIR="${EQ_TOOLS}/npm"
+EQ_NPM_VERSION=$(get_tool_version npm)
+EQ_NPM_HOME="${EQ_NPM_DIR}/${EQ_NPM_VERSION}"
+EQ_NPM_BIN="${EQ_NPM_HOME}/bin"
+EQ_NPM_EXECUTABLE="${EQ_NPM_BIN}/npm-cli.js"
+EQ_NPX_EXECUTABLE="${EQ_NPM_BIN}/npx-cli.js"
+
+set_npm() {
+  local EQ_ROOT=$(dirname ${BASH_SOURCE[0]})
+
+  ln -Fs "${EQ_ROOT}/npm-run" "${EQ_SHIMS}/npm"
+  chmod +x "${EQ_SHIMS}/npm"
+
+  ln -Fs "${EQ_ROOT}/npx-run" "${EQ_SHIMS}/npx"
+  chmod +x "${EQ_SHIMS}/npx"
+
+  echo "Using npm@${EQ_NPM_VERSION}"
+}
+
+install_npm() {
+  mkdir -p "${EQ_NPM_HOME}"
+
+  local archive_url="https://registry.npmjs.org/npm/-/"
+  local archive="npm-${EQ_NPM_VERSION}"
+  local archive_ext=".tgz"
+
+  archive_url="${archive_url}${archive}${archive_ext}"
+
+  if [ ! -f "${EQ_NPM_EXECUTABLE}" ]; then
+    echo "Downloading npm@${EQ_NPM_VERSION}"
+
+    download "${archive_url}" > "${EQ_NPM_HOME}/${archive}${archive_ext}"
+    tar -xf "${EQ_NPM_HOME}/${archive}${archive_ext}" -C "${EQ_NPM_HOME}"
+    cp -r "${EQ_NPM_HOME}/package/" "${EQ_NPM_HOME}"
+    chmod +x "${EQ_NPM_EXECUTABLE}"
+    chmod +x "${EQ_NPX_EXECUTABLE}"
+
+    rm -rf "${EQ_NPM_HOME}/package"
+    rm "${EQ_NPM_HOME}/${archive}${archive_ext}"
+  fi
+
+  set_npm
+}
+
+if [ ! "$EQ_NPM_VERSION" = "" ]; then
+  echo "\n=> npm"
+  install_npm
+fi
