@@ -9,11 +9,12 @@ EQ_PNPM_BIN="${EQ_PNPM_HOME}/bin"
 
 EXECUTABLE="${EQ_PNPM_BIN}/pnpm.cjs"
 
-export PNPM_HOME="${EQ_PNPM_HOME}"
-
 if [ "${EQ_PNPM_VERSION}" = "" ]; then
   abort "The environment doesn't specify the version of 'pnpm'."
 fi
+
+export PNPM_HOME="${EQ_PNPM_HOME}"
+export PATH="${PNPM_HOME}:${PATH}"
 
 if [ -f "${EXECUTABLE}" ]; then
   $EXECUTABLE $@
