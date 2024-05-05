@@ -18,7 +18,15 @@ help()
 }
 
 run() {
-  .equal/$1.sh
+  local filename=$2
+  shift
+  shift
+
+  if [ -f ".equal/$filename" ]; then
+    .equal/$filename $@
+  elif [ -f ".equal/$filename.sh" ]; then
+    .equal/$filename.sh $@
+  fi
 }
 
 create_command() {
@@ -64,7 +72,7 @@ case "$1" in
     echo "\nequal create-command $2: done!"
     exit;;
   run)
-    run $2
+    run $@
     echo "\nequal run $2: done!"
     exit;;
   env | "")
