@@ -48,6 +48,7 @@ setup_env() {
   source "${EQ_HOME}/plugins/npm/setup"
   source "${EQ_HOME}/plugins/pnpm/setup"
   source "${EQ_HOME}/plugins/apollo-rover/setup"
+  source "${EQ_HOME}/plugins/go/setup"
 
   if [ -f .equal/setup.sh ]; then
     echo "\n=> project setup"

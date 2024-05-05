@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+
+source "${EQ_HOME}/plugins/helpers/env"
+
+EQ_GO_DIR="${EQ_TOOLS}/go"
+EQ_GO_VERSION=$(get_tool_version go)
+EQ_GO_HOME="${EQ_GO_DIR}/${EQ_GO_VERSION}"
+EQ_GO_BIN="${EQ_GO_HOME}/bin"
+
+EXECUTABLE="${EQ_GO_BIN}/gofmt"
+
+if [ "${EQ_GO_VERSION}" = "" ]; then
+  abort "The environment doesn't specify the version of 'go'."
+fi
+
+export GOPATH="${EQ_GO_HOME}/go"
+
+if [ -f "${EXECUTABLE}" ]; then
+  $EXECUTABLE $@
+else
+  echo "Could not find the installation of 'go@${EQ_GO_VERSION}'."
+  echo "Try to execute the command 'equal' to install."
+fi

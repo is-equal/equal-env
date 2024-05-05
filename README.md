@@ -46,6 +46,7 @@ commands:
 - [NPM](https://www.npmjs.com/)
 - [PNPM](https://pnpm.io/)
 - [Apollo Rover](https://www.apollographql.com/docs/rover/)
+- [Go](https://go.dev/)
 
 ## Requirements
 
