@@ -14,5 +14,15 @@ EQ_SHIMS="${EQ_HOME}/shims"
 EQ_TOOLS="${EQ_HOME}/tools"
 
 if [ "${EQ_ENVIRONMENT}" = "" ]; then
-  export EQ_ENVIRONMENT="$(cat .equal-env)"
+  # TODO: improve this implementation
+
+  if [ -f ".equal-env" ]; then
+    export EQ_ENVIRONMENT="$(cat .equal-env)"
+  elif  [ -f "../.equal-env" ]; then
+    export EQ_ENVIRONMENT="$(cat ../.equal-env)"
+  elif  [ -f "../../.equal-env" ]; then
+    export EQ_ENVIRONMENT="$(cat ../../.equal-env)"
+  elif  [ -f "${HOME}/.equal-env" ]; then
+    export EQ_ENVIRONMENT="$(cat ${HOME}/.equal-env)"
+  fi
 fi
