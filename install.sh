@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-if [ "${EQ_HOME}" = ""]; then
+if [[ -z "${EQ_HOME}" ]]; then
   echo '
   # equal
   export EQ_HOME="$HOME/.equal"
