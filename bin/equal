@@ -23,9 +23,9 @@ run() {
   shift
 
   if [ -f ".equal/$filename" ]; then
-    .equal/$filename $@
+    exec .equal/$filename $@
   elif [ -f ".equal/$filename.sh" ]; then
-    .equal/$filename.sh $@
+    exec .equal/$filename.sh $@
   fi
 }
 
@@ -49,11 +49,6 @@ setup_env() {
   source "${EQ_HOME}/plugins/pnpm/setup"
   source "${EQ_HOME}/plugins/apollo-rover/setup"
   source "${EQ_HOME}/plugins/go/setup"
-
-  if [ -f .equal/setup.sh ]; then
-    echo "\n=> project setup"
-    .equal/setup.sh
-  fi
 }
 
 while getopts ":h" option; do

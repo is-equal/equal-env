@@ -14,7 +14,7 @@ if [ "${EQ_NODE_VERSION}" = "" ]; then
 fi
 
 if [ -f "${EXECUTABLE}" ]; then
-  $EXECUTABLE $@
+  exec $EXECUTABLE $@
 else
   echo "Could not find the installation of 'node@${EQ_NODE_VERSION}'."
   echo "Try to execute the command 'equal' to install."

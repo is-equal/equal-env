@@ -16,7 +16,7 @@ fi
 export GOPATH="${EQ_GO_HOME}/go"
 
 if [ -f "${EXECUTABLE}" ]; then
-  $EXECUTABLE $@
+  exec $EXECUTABLE $@
 else
   echo "Could not find the installation of 'go@${EQ_GO_VERSION}'."
   echo "Try to execute the command 'equal' to install."

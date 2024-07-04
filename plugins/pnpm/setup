@@ -37,6 +37,8 @@ install_pnpm() {
     chmod +x "${EQ_PNPM_EXECUTABLE}"
     chmod +x "${EQ_PNPX_EXECUTABLE}"
 
+    echo "\nnpm-path = \"${EQ_HOME}/shims/npm\"" >>  "${EQ_PNPM_HOME}/dist/pnpmrc"
+
     rm -rf "${EQ_PNPM_HOME}/package"
     rm "${EQ_PNPM_HOME}/${archive}${archive_ext}"
   fi
