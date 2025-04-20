@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+unset EQENV_NODE_DIR
+unset EQENV_NODE_PLUGIN_DIR
+
+unset EQENV_NODE_VERSION
+unset EQENV_NODE_HOME
+unset EQENV_NODE_BIN
+unset EQENV_NODE_EXECUTABLE
+unset EQENV_NPM_EXECUTABLE
+unset EQENV_NPX_EXECUTABLE
+
+[ -s "${EQENV_SHIMS}/node" ] && rm "${EQENV_SHIMS}/node"
+[ -s "${EQENV_SHIMS}/corepack" ] && rm "${EQENV_SHIMS}/corepack"
+[ -s "${EQENV_SHIMS}/npm" ] && rm "${EQENV_SHIMS}/npm"
+[ -s "${EQENV_SHIMS}/npx" ] && rm "${EQENV_SHIMS}/npx"
+
+# If corepack was used
+[ -s "${EQENV_SHIMS}/pnpm" ] && rm "${EQENV_SHIMS}/pnpm"
+[ -s "${EQENV_SHIMS}/pnpx" ] && rm "${EQENV_SHIMS}/pnpx"
+[ -s "${EQENV_SHIMS}/yarn" ] && rm "${EQENV_SHIMS}/yarn"
+[ -s "${EQENV_SHIMS}/yarnpkg" ] && rm "${EQENV_SHIMS}/yarnpkg"

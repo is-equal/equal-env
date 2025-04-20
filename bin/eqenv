@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+export EQENV_FILE=".eqenvrc"
+
+eqenv_help()
+{
+   echo "Equal Environment Tool"
+   echo
+   echo "Syntax: eqenv (alias for eqenv use)"
+   echo "           eqenv [command]"
+   echo
+   echo "commands:"
+   echo "   init    create virtual environment"
+   echo "   use     load/install all tools configured and activate the environment"
+   echo
+}
+
+eqenv_init() {
+  if [ -f "$EQENV_FILE" ]; then
+    echo "project already initialized"
+  else
+    touch $EQENV_FILE
+    echo "project initialized"
+  fi
+}
+
+eqenv_use() {
+  if [ ! -f "$EQENV_FILE" ]; then
+    echo "project environment configuration not found"
+    return 1
+  fi
+
+  source "$EQENV_HOME/bin/eqenv-activate"
+}
+
+eqenv_leave() {
+  if [[ -n "$EQENV_SHIMS" ]]; then
+    source "$EQENV_HOME/bin/eqenv-deactivate"
+  else
+    echo ""
+    echo "no virtual environment to leave"
+    echo ""
+  fi
+}
+
+eqenv() {
+  if [[ "$1" == "help" ]]; then
+    eqenv_help
+  elif [[ "$1" == "init" ]]; then
+    eqenv_init
+  elif [[ "$1" == "use" ]]; then
+    eqenv_use
+  elif [[ "$1" == "leave" ]]; then
+    eqenv_leave
+  else
+    echo ""
+    eqenv_help
+  fi
+}

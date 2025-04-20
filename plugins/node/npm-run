@@ -1,38 +1,38 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-source "${EQ_HOME}/plugins/helpers/env"
+source "${EQENV_HELPERS}/env"
 
-EQ_NODE_DIR="${EQ_TOOLS}/node"
-EQ_NODE_VERSION=$(get_tool_version node)
-EQ_NODE_HOME="${EQ_NODE_DIR}/${EQ_NODE_VERSION}"
-EQ_NODE_BIN="${EQ_NODE_HOME}/bin"
+EQENV_NODE_VERSION=$(get_tool_version node)
+EQENV_NPM_VERSION=$(get_tool_version npm)
 
-EXECUTABLE_FROM_NODE="${EQ_NODE_HOME}/lib/node_modules/npm/bin/npm-cli.js"
-
-EQ_NPM_DIR="${EQ_TOOLS}/npm"
-EQ_NPM_VERSION=$(get_tool_version npm)
-EQ_NPM_HOME="${EQ_NPM_DIR}/${EQ_NPM_VERSION}"
-EQ_NPM_BIN="${EQ_NPM_HOME}/bin"
-
-EXECUTABLE_FROM_NPM="${EQ_NPM_BIN}/npm-cli.js"
-
-if [[ "${EQ_NPM_VERSION}" = ""]] && [["${EQ_NODE_VERSION}" = ""  ]]; then
+if [[ -z "${EQENV_NPM_VERSION}" ]] && [[ -z "${EQENV_NODE_VERSION}" ]]; then
   abort "The environment doesn't specify the version of 'node' or 'npm'."
 fi
 
-VERSION="'node' or 'npm'"
+EQENV_NODE_DIR="${EQENV_STORAGE}/node"
+EQENV_NODE_HOME="${EQENV_NODE_DIR}/${EQENV_NODE_VERSION}"
+EQENV_NODE_BIN="${EQENV_NODE_HOME}/bin"
 
-if [ "${EQ_NPM_VERSION}" != "" ]; then
-  VERSION="npm@${EQ_NPM_VERSION}"
-  EXECUTABLE="${EXECUTABLE_FROM_NPM}"
-elif [ "${EQ_NODE_VERSION}" != "" ]; then
-  VERSION="node@${EQ_NODE_VERSION}"
-  EXECUTABLE="${EXECUTABLE_FROM_NODE}"
+EXECUTABLE_FROM_NODE="${EQENV_NODE_HOME}/lib/node_modules/npm/bin/npm-cli.js"
+
+EQENV_NPM_DIR="${EQENV_STORAGE}/npm"
+EQENV_NPM_HOME="${EQENV_NPM_DIR}/${EQENV_NPM_VERSION}"
+EQENV_NPM_BIN="${EQENV_NPM_HOME}/bin"
+
+EXECUTABLE_FROM_NPM="${EQENV_NPM_BIN}/npm-cli.js"
+
+EQENV_EXECUTABLE_VERSION="'node' or 'npm'"
+
+if [ -z "${EQENV_NPM_VERSION}" ]; then
+  EQENV_EXECUTABLE_VERSION="npm@${EQENV_NPM_VERSION}"
+  EQENV_EXECUTABLE="${EXECUTABLE_FROM_NPM}"
+elif [ -z "${EQENV_NODE_VERSION}" ]; then
+  EQENV_EXECUTABLE_VERSION="node@${EQENV_NODE_VERSION}"
+  EQENV_EXECUTABLE="${EXECUTABLE_FROM_NODE}"
 fi
 
-if [ -f "${EXECUTABLE}" ]; then
-  exec $EXECUTABLE $@
+if [ -s "${EQENV_EXECUTABLE}" ]; then
+  exec $EQENV_EXECUTABLE $@
 else
-  echo "Could not find the installation of ${VERSION}."
-  echo "Try to execute the command 'equal' to install."
+  echo "Could not find the installation of ${EQENV_EXECUTABLE_VERSION}."
 fi

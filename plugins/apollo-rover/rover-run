@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+source "${EQENV_HELPERS}/env"
+
+EQENV_APOLLO_ROVER_VERSION=$(get_tool_version apollo-rover)
+
+if [ -z "${EQENV_APOLLO_ROVER_VERSION}" ]; then
+  abort "The environment doesn't specify the version of 'apollo-rover'."
+fi
+
+EQENV_APOLLO_ROVER_DIR="${EQENV_STORAGE}/apollo-rover"
+EQENV_APOLLO_ROVER_HOME="${EQENV_APOLLO_ROVER_DIR}/${EQENV_APOLLO_ROVER_VERSION}"
+EQENV_APOLLO_ROVER_BIN="${EQENV_APOLLO_ROVER_HOME}"
+
+EQENV_EXECUTABLE="${EQENV_APOLLO_ROVER_BIN}/run.js"
+
+if [ -s "${EQENV_EXECUTABLE}" ]; then
+  exec node $EQENV_EXECUTABLE $@
+else
+  echo "Could not find the installation of 'apollo-rover@${EQENV_APOLLO_ROVER_VERSION}'."
+fi

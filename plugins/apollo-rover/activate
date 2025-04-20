@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+EQENV_APOLLO_ROVER_VERSION=$(get_tool_version apollo-rover)
+
+EQENV_APOLLO_ROVER_PLUGIN_DIR="${EQENV_PLUGINS}/apollo-rover"
+EQENV_APOLLO_ROVER_DIR="${EQENV_STORAGE}/apollo-rover"
+EQENV_APOLLO_ROVER_HOME="${EQENV_APOLLO_ROVER_DIR}/${EQENV_APOLLO_ROVER_VERSION}"
+EQENV_APOLLO_ROVER_BIN="${EQENV_APOLLO_ROVER_HOME}"
+EQENV_APOLLO_ROVER_EXECUTABLE="${EQENV_APOLLO_ROVER_BIN}/run.js"
+
+set_apollo_rover() {
+  ln -fs "${EQENV_APOLLO_ROVER_PLUGIN_DIR}/rover-run" "${EQENV_SHIMS}/rover"
+  chmod +x "${EQENV_SHIMS}/rover"
+
+  echo "Using @apollo/rover@${EQENV_APOLLO_ROVER_VERSION}"
+}
+
+install_apollo_rover() {
+  mkdir -p "${EQENV_TMP}"
+  mkdir -p "${EQENV_APOLLO_ROVER_HOME}"
+
+  local archive_url="https://registry.npmjs.org/@apollo/rover/-/"
+  local archive="rover-${EQENV_APOLLO_ROVER_VERSION}"
+  local archive_ext=".tgz"
+
+  archive_url="${archive_url}${archive}${archive_ext}"
+
+  if [ ! -s "${EQENV_APOLLO_ROVER_EXECUTABLE}" ]; then
+    echo "Downloading @apollo/rover@${EQENV_APOLLO_ROVER_VERSION}"
+
+    download "${archive_url}" > "${EQENV_TMP}/${archive}${archive_ext}"
+
+    tar -xf "${EQENV_TMP}/${archive}${archive_ext}" -C "${EQENV_TMP}"
+    cp -r "${EQENV_TMP}/package/"* "${EQENV_APOLLO_ROVER_HOME}"
+    chmod +x "${EQENV_APOLLO_ROVER_EXECUTABLE}"
+
+    local ppwd=$(pwd)
+    cd $EQENV_APOLLO_ROVER_HOME
+    npm i --no-audit --silent --no-progress
+    cd $ppwd
+
+    rm -rf "${EQENV_TMP}/package"
+    rm "${EQENV_TMP}/${archive}${archive_ext}"
+  fi
+
+  set_apollo_rover
+}
+
+if [ -n "$EQENV_APOLLO_ROVER_VERSION" ] && [ ! -x "$EQENV_APOLLO_ROVER_EXECUTABLE" ]; then
+  install_apollo_rover
+elif [ -n "$EQENV_APOLLO_ROVER_VERSION" ] && [ -x "$EQENV_APOLLO_ROVER_EXECUTABLE" ]; then
+  set_apollo_rover
+fi

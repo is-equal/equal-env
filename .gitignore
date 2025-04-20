@@ -1,6 +1,7 @@
 # Project
-tools/
+storage/
 shims/
+tmp/
 
 # Misc
 .DS_Store

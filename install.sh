@@ -1,8 +1,11 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-if [[ -z "${EQ_HOME}" ]]; then
+if [ -z "$EQENV_HOME" ]; then
   echo '
-  # equal
-  export EQ_HOME="$HOME/.equal"
-  export PATH="$EQ_HOME/shims:$EQ_HOME/bin:$PATH"' >> ~/.zshrc
+# Equal Environment Tool
+export EQENV_HOME="$HOME/.equal-env"
+[ -s "$EQENV_HOME/bin/eqenv" ] && \. "$EQENV_HOME/bin/eqenv"
+' >> ~/.bashrc
 fi
+
+. ~/.bashrc

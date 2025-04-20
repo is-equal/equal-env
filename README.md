@@ -7,50 +7,47 @@ A Shell Script Project inspired by [nvm](https://github.com/nvm-sh/nvm), [asdf](
 Download:
 
 ```bash
-git clone https://github.com/is-equal/equal-env ~/.equal
+git clone https://github.com/is-equal/equal-env ~/.equal-env
 ```
 
 Install:
 
 ```bash
-sh ~/.equal/install.sh
+sh ~/.equal-env/install.sh
 ```
 
 ## Usage
 
-Create a file with name `.equal-env`, inside the project folder.
+Create a file with name `.eqenvrc`, inside the project folder.
 
 Example:
 
 ```
 node@21.7.3
-npm@10.5.0
 ```
 
 ### CLI
 
-`equal -h`:
+`eqenv help`:
 ```
-Syntax: equal (alias for equal env)
-        equal [command]
+Syntax: eqenv (alias for eqenv use)
+           eqenv [command]
 
 commands:
-   create-command    create custom command (in .equal/)
-   env               load/install all tools configured (in .equal-env file)
-   run               execute script (at .equal/<script-name>.sh)
+   init    create virtual environment
+   use     activate the environment and load/install all tools required
 ```
 
 ## Supported Tools
 
 - [NodeJS](https://nodejs.org/en)
-- [NPM](https://www.npmjs.com/)
-- [PNPM](https://pnpm.io/)
 - [Apollo Rover](https://www.apollographql.com/docs/rover/)
 - [Go](https://go.dev/)
 
 ## Requirements
 
-ZSH Terminal:
+bash/zsh terminal:
 - MacOS Apple Silicon
+- Windows WSL 2 (Ubuntu)
 - MacOS Intel (Not tested)
 - Linux (Not tested)

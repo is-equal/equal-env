@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+EQENV_GO_VERSION=$(get_tool_version go)
+
+EQENV_GO_PLUGIN_DIR="${EQENV_PLUGINS}/go"
+EQENV_GO_DIR="${EQENV_STORAGE}/go"
+EQENV_GO_HOME="${EQENV_GO_DIR}/${EQENV_GO_VERSION}"
+EQENV_GO_BIN="${EQENV_GO_HOME}/bin"
+EQENV_GO_EXECUTABLE="${EQENV_GO_BIN}/go"
+EQENV_GOFMT_EXECUTABLE="${EQENV_GO_BIN}/gofmt"
+
+get_arch() {
+  local arch
+  arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
+
+  case "${arch}" in
+    x86_64 | amd64) arch="amd64" ;;
+    armv6) arch="armv6l" ;;
+    *386*) arch="386" ;;
+    arm64 | aarch64) arch="arm64" ;;
+  esac
+
+  printf '%s' "${arch}"
+}
+
+get_os() {
+  local result="$(uname -s | tr '[:upper:]' '[:lower:]')"
+
+  printf '%s' "${result}"
+}
+
+set_go() {
+  ln -fs "${EQENV_GO_PLUGIN_DIR}/go-run" "${EQENV_SHIMS}/go"
+  chmod +x "${EQENV_SHIMS}/go"
+
+  ln -fs "${EQENV_GO_PLUGIN_DIR}/gofmt-run" "${EQENV_SHIMS}/gofmt"
+  chmod +x "${EQENV_SHIMS}/gofmt"
+
+  echo "Using go@${EQENV_GO_VERSION}"
+}
+
+install_go() {
+  mkdir -p "${EQENV_TMP}"
+  mkdir -p "${EQENV_GO_HOME}"
+
+  local os=$(get_os)
+  local arch=$(get_arch)
+  local archive_url="https://go.dev/dl/"
+  local archive="go${EQENV_GO_VERSION}.${os}-${arch}"
+  local archive_ext=".tar.gz"
+
+  archive_url="${archive_url}${archive}${archive_ext}"
+
+  if [ ! -s "${EQENV_GO_EXECUTABLE}" ]; then
+    echo "Downloading go@${EQENV_GO_VERSION}"
+
+    download "${archive_url}" > "${EQENV_TMP}/${archive}${archive_ext}"
+
+    tar -xf "${EQENV_TMP}/${archive}${archive_ext}" -C "${EQENV_TMP}"
+    cp -r "${EQENV_TMP}/go/"* "${EQENV_GO_HOME}"
+    chmod +x "${EQENV_GO_EXECUTABLE}"
+
+    rm -rf "${EQENV_TMP}/go"
+    rm "${EQENV_TMP}/${archive}${archive_ext}"
+  fi
+
+  set_go
+}
+
+if [ -n "$EQENV_GO_VERSION" ] && [ ! -x "$EQENV_GO_EXECUTABLE" ]; then
+  install_go
+elif [ -n "$EQENV_GO_VERSION" ] && [ -x "$EQENV_GO_EXECUTABLE" ]; then
+  set_go
+fi

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+find $EQENV_PLUGINS -maxdepth 2 -type f -name "deactivate" | while read -r plugin; do
+  source "$plugin"
+done
+
+export PATH="$EQENV_OLD_PATH"
+export PS1="$EQENV_OLD_PS1"
+
+unset EQENV_OLD_PATH
+unset EQENV_OLD_PS1
+unset EQENV_HELPERS
+unset EQENV_PLUGINS
+unset EQENV_SHIMS
+unset EQENV_STORAGE
+unset EQENV_TMP
+
+echo ""
+echo "virtual environment deactivated"
+echo ""

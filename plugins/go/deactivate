@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+unset EQENV_GO_VERSION
+unset EQENV_GO_PLUGIN_DIR
+unset EQENV_GO_DIR
+unset EQENV_GO_HOME
+unset EQENV_GO_BIN
+unset EQENV_GO_EXECUTABLE
+unset EQENV_GOFMT_EXECUTABLE
+
+[ -s "${EQENV_SHIMS}/go" ] && rm "${EQENV_SHIMS}/go"
+[ -s "${EQENV_SHIMS}/gofmt" ] && rm "${EQENV_SHIMS}/gofmt"

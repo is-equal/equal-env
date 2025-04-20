@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# From https://github.com/Homebrew/install/blob/master/install.sh
+abort() {
+  printf "%s\n" "$@"
+  exit 1
+}
+
+get_tool_version() {
+  echo "$EQENV_REQUIREMENTS" | grep -w $1 | awk 'match($0, /@(.*)/) { print substr($0, RSTART+1, RLENGTH-1) }'
+}

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+unset EQENV_APOLLO_ROVER_VERSION
+unset EQENV_APOLLO_ROVER_DIR
+unset EQENV_APOLLO_ROVER_HOME
+unset EQENV_APOLLO_ROVER_BIN
+
+[ -s "${EQENV_SHIMS}/rover" ] && rm "${EQENV_SHIMS}/rover"

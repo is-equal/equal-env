@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # From https://github.com/apollographql/rover/blob/main/installers/binstall/scripts/nix/install.sh
 need_cmd() {

@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+
+EQENV_NODE_VERSION=$(get_tool_version node)
+
+EQENV_NODE_DIR="${EQENV_STORAGE}/node"
+EQENV_NODE_PLUGIN_DIR="${EQENV_PLUGINS}/node"
+EQENV_NODE_HOME="${EQENV_NODE_DIR}/${EQENV_NODE_VERSION}"
+EQENV_NODE_BIN="${EQENV_NODE_HOME}/bin"
+EQENV_NODE_EXECUTABLE="${EQENV_NODE_BIN}/node"
+EQENV_NPM_EXECUTABLE="${EQENV_NODE_HOME}/lib/node_modules/npm/bin/npm-cli.js"
+EQENV_NPX_EXECUTABLE="${EQENV_NODE_HOME}/lib/node_modules/npm/bin/npx-cli.js"
+
+get_arch() {
+  local arch
+  arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
+
+  case "${arch}" in
+    x86_64 | amd64) arch="x64" ;;
+    armv*) arch="arm" ;;
+    arm64 | aarch64) arch="arm64" ;;
+  esac
+
+  # `uname -m` in some cases mis-reports 32-bit OS as 64-bit, so double check
+  if [ "${arch}" = "x64" ] && [ "$(getconf LONG_BIT)" -eq 32 ]; then
+    arch=i686
+  elif [ "${arch}" = "arm64" ] && [ "$(getconf LONG_BIT)" -eq 32 ]; then
+    arch=arm
+  fi
+
+  case "$arch" in
+    x64*) ;;
+    arm64*) ;;
+    *) return 1
+  esac
+
+  printf '%s' "${arch}"
+}
+
+get_os() {
+  local result="$(uname -s | tr '[:upper:]' '[:lower:]')"
+
+  printf '%s' "${result}"
+}
+
+set_node() {
+  ln -fs "${EQENV_NODE_PLUGIN_DIR}/node-run" "${EQENV_SHIMS}/node"
+  chmod +x "${EQENV_SHIMS}/node"
+
+  ln -fs "${EQENV_NODE_PLUGIN_DIR}/corepack-run" "${EQENV_SHIMS}/corepack"
+  chmod +x "${EQENV_SHIMS}/corepack"
+
+  ln -fs "${EQENV_NODE_PLUGIN_DIR}/npm-run" "${EQENV_SHIMS}/npm"
+  chmod +x "${EQENV_SHIMS}/npm"
+
+  ln -fs "${EQENV_NODE_PLUGIN_DIR}/npx-run" "${EQENV_SHIMS}/npx"
+  chmod +x "${EQENV_SHIMS}/npx"
+
+  echo "Using node@${EQENV_NODE_VERSION}"
+}
+
+install_node() {
+  mkdir -p "${EQENV_TMP}"
+  mkdir -p "${EQENV_NODE_HOME}"
+
+  local os=$(get_os)
+  local arch=$(get_arch)
+  local archive_url="https://nodejs.org/download/release/v${EQENV_NODE_VERSION}/"
+  local archive="node-v${EQENV_NODE_VERSION}-${os}-${arch}"
+  local archive_ext=".tar.gz"
+
+  archive_url="${archive_url}${archive}${archive_ext}"
+
+  if [ ! -s "${EQENV_NODE_EXECUTABLE}" ]; then
+    echo "Downloading node@${EQENV_NODE_VERSION}"
+
+    download "${archive_url}" > "${EQENV_TMP}/${archive}${archive_ext}"
+
+    tar -xf "${EQENV_TMP}/${archive}${archive_ext}" -C "${EQENV_TMP}"
+    mv -f "${EQENV_TMP}/${archive}/"* "${EQENV_NODE_HOME}"
+    chmod +x "${EQENV_NODE_EXECUTABLE}"
+
+    rm -rf "${EQENV_TMP}/${archive}"
+    rm "${EQENV_TMP}/${archive}${archive_ext}"
+  fi
+
+  set_node
+}
+
+if [ -n "$EQENV_NODE_VERSION" ] && [ ! -x "$EQENV_NODE_EXECUTABLE" ]; then
+  install_node
+elif [ -n "$EQENV_NODE_VERSION" ] && [ -x "$EQENV_NODE_EXECUTABLE" ]; then
+  set_node
+fi
