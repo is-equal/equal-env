@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-source "${EQENV_HELPERS}/env"
-
-EQENV_APOLLO_ROVER_VERSION=$(get_tool_version apollo-rover)
-
 if [ -z "${EQENV_APOLLO_ROVER_VERSION}" ]; then
   abort "The environment doesn't specify the version of 'apollo-rover'."
 fi

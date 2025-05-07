@@ -7,5 +7,25 @@ abort() {
 }
 
 get_tool_version() {
-  echo "$EQENV_REQUIREMENTS" | grep -w $1 | awk 'match($0, /@(.*)/) { print substr($0, RSTART+1, RLENGTH-1) }'
+  local version=""
+
+  version=$(echo "$EQENV_REQUIREMENTS" | grep -w $1 | awk 'match($0, /@(.*)/) { print substr($0, RSTART+1, RLENGTH-1) }')
+
+  if [[ "$1" == "node" && -z "$version" && -f ".nvmrc" ]]; then
+    version=$(cat ".nvmrc")
+    version=$(normalize_node_version "$version")
+  fi
+
+  echo "$version"
+}
+
+normalize_node_version() {
+  local version="$1"
+  local parts=(${version//./ })
+
+  while [ "${#parts[@]}" -lt 3 ]; do
+    parts+=("0")
+  done
+
+  echo "${parts[0]}.${parts[1]}.${parts[2]}"
 }

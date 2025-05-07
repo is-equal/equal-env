@@ -6,12 +6,17 @@ export EQENV_PLUGINS="${EQENV_HOME}/plugins"
 export EQENV_SHIMS="${EQENV_HOME}/shims"
 export EQENV_STORAGE="${EQENV_HOME}/storage"
 export EQENV_TMP="${EQENV_HOME}/tmp"
-export EQENV_REQUIREMENTS=$(cat .eqenvrc)
+export EQENV_REQUIREMENTS=$(cat .eqenvrc 2>/dev/null || echo "")
 
 export EQENV_OLD_PATH="$PATH"
 export EQENV_OLD_PS1="$PS1"
 
-export PS1="(virtual-env) \[\033[01;32m\]$(basename "$(pwd)")\[\033[00m\]\$ "
+if [ -n "$ZSH_VERSION" ]; then
+  export PS1="(virtual-env) %F{green}$(basename "$(pwd)")%f\$ "
+elif [ -n "$BASH_VERSION" ]; then
+  export PS1="(virtual-env) \[\033[01;32m\]$(basename "$(pwd)")\[\033[00m\]\$ "
+fi
+
 export PATH="${EQENV_SHIMS}:$PATH"
 export PATH="${EQENV_BIN}:$PATH"
 
@@ -23,9 +28,9 @@ mkdir -p $EQENV_TMP
 source "${EQENV_HELPERS}/setup"
 source "${EQENV_HELPERS}/env"
 
-find $EQENV_PLUGINS -maxdepth 2 -type f -name "activate" | while read -r plugin; do
+while read -r plugin; do
   source "$plugin"
-done
+done < <(find "$EQENV_PLUGINS" -maxdepth 2 -type f -name "activate")
 
 echo ""
 echo "virtual environment activated"

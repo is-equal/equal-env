@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-source "${EQENV_HELPERS}/env"
-
-EQENV_GO_VERSION=$(get_tool_version go)
-
 if [ -z "${EQENV_GO_VERSION}" ]; then
   abort "The environment doesn't specify the version of 'go'."
 fi

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-EQENV_GO_VERSION=$(get_tool_version go)
+export EQENV_GO_VERSION=$(get_tool_version go)
 
 EQENV_GO_PLUGIN_DIR="${EQENV_PLUGINS}/go"
 EQENV_GO_DIR="${EQENV_STORAGE}/go"

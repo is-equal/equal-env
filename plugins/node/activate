@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-EQENV_NODE_VERSION=$(get_tool_version node)
+export EQENV_NODE_VERSION=$(get_tool_version node)
 
 EQENV_NODE_DIR="${EQENV_STORAGE}/node"
 EQENV_NODE_PLUGIN_DIR="${EQENV_PLUGINS}/node"

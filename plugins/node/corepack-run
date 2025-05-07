@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-source "${EQENV_HELPERS}/env"
-
-EQENV_NODE_VERSION=$(get_tool_version node)
-
 if [ -z "${EQENV_NODE_VERSION}" ]; then
   abort "The environment doesn't specify the version of 'node'."
 fi

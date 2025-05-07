@@ -25,7 +25,7 @@ eqenv_init() {
 }
 
 eqenv_use() {
-  if [ ! -f "$EQENV_FILE" ]; then
+  if [[ ! -f "$EQENV_FILE" && ! -f ".nvmrc" ]]; then
     echo "project environment configuration not found"
     return 1
   fi

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-EQENV_APOLLO_ROVER_VERSION=$(get_tool_version apollo-rover)
+export EQENV_APOLLO_ROVER_VERSION=$(get_tool_version apollo-rover)
 
 EQENV_APOLLO_ROVER_PLUGIN_DIR="${EQENV_PLUGINS}/apollo-rover"
 EQENV_APOLLO_ROVER_DIR="${EQENV_STORAGE}/apollo-rover"

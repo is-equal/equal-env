@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-find $EQENV_PLUGINS -maxdepth 2 -type f -name "deactivate" | while read -r plugin; do
+while read -r plugin; do
   source "$plugin"
-done
+done < <(find "$EQENV_PLUGINS" -maxdepth 2 -type f -name "deactivate")
 
 export PATH="$EQENV_OLD_PATH"
 export PS1="$EQENV_OLD_PS1"

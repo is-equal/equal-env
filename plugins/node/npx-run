@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-source "${EQENV_HELPERS}/env"
-
-EQENV_NODE_VERSION=$(get_tool_version node)
-EQENV_NPM_VERSION=$(get_tool_version npm)
-
 if [[ -z "${EQENV_NPM_VERSION}" ]] && [[ -z "${EQENV_NODE_VERSION}" ]]; then
   abort "The environment doesn't specify the version of 'node' or 'npm'."
 fi
