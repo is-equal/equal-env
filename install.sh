@@ -1,8 +1,11 @@
-TERMINAL_RC_CONTENT='\n# Equal Environment Tool\n
-export EQENV_HOME="$HOME/.equal-env"\n
-[ -s "$EQENV_HOME/bin/eqenv" ] && \. "$EQENV_HOME/bin/eqenv"\n'
+TERMINAL_RC_CONTENT='
+# Equal Environment Tool
+export EQENV_HOME="$HOME/.equal-env"
+[ -s "$EQENV_HOME/bin/eqenv" ] && \. "$EQENV_HOME/bin/eqenv"
+'
 
 if [ -n "$ZSH_VERSION" ]; then
+  echo "Configuring ZSH Terminal..."
   touch ~/.zshrc
 
   if [ -z "$EQENV_HOME" ]; then
@@ -11,6 +14,7 @@ if [ -n "$ZSH_VERSION" ]; then
 
   source ~/.zshrc
 elif [ -n "$BASH_VERSION" ]; then
+  echo "Configuring BASH Terminal..."
   touch ~/.bashrc
 
   if [ -z "$EQENV_HOME" ]; then
